@@ -1,0 +1,25 @@
+.game-div-wrapper{
+    width: 600px;
+    height: 600px;
+    position: relative;
+}
+
+.play-box{
+    float: left;
+    width: 31%;
+    height: 31%;
+    border: 1px solid #DDD;
+}
+
+.box-unplayed:hover{
+    border: 1px solid;
+    background: #EEE;
+}
+
+.box-played-x{
+    background: red;
+}
+
+.box-played-o{
+    background: blue;
+}
