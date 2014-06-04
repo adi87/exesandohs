@@ -1,0 +1,26 @@
+
+<span>room</span>: <strong>{{room_id}}</strong>
+<div class="row">
+    <div class="span6">
+        <div class="player-indicator" ng-class="{'turn-indicator': (turn)}"><h5>You</h5></div>
+        <span>UID: <input ng-model="user.uid" type="text"></input></span><br/>
+        <span>Character: <input ng-model="user.character" type="text"></input></span>
+    </div>
+
+    <div class="span6">
+        <div class="player-indicator" ng-class="{'turn-indicator': (!turn)}"><h5>Opponent</h5></div>
+        <span>UID: <input ng-model="opponent.uid" type="text"></input></span><br/>
+        <span>Character: <input ng-model="opponent.character" type="text"></input></span>
+    </div>
+</div>
+<input type="button" class="btn" value="restart" ng-click="reset_game()"></input>
+<div class="game-div-wrapper">
+    <div class="play-box box-played-{{box.character}}" ng-class="{'box-unplayed': (box.character==null), 'box-won': (box.won)}" ng-repeat="(box_id,box) in play_boxes" ng-click="takeTurn(box_id)">
+        <div class='centered-vert-dad'>
+            <span class="centered-vert"></span>
+            <div class='centered-vert-child'>
+                <span class="character-wrap">{{box.character}}</span>
+            </div>
+        </div>
+    </div>
+</div>
