@@ -9,6 +9,7 @@
     width: 31%;
     height: 31%;
     border: 1px solid #DDD;
+    text-align:center;
 }
 
 .box-unplayed:hover{
@@ -16,10 +17,40 @@
     background: #EEE;
 }
 
+.box-won{
+    color: green;
+}
+
 .box-played-x{
-    background: red;
+    /*background: red;*/
 }
 
 .box-played-o{
-    background: blue;
+    /*background: blue;*/
+}
+
+
+span.centered-vert{
+    line-height: 190px;
+}
+div.centered-vert-child{
+    vertical-align:middle;
+    display:inline-block;
+}
+
+.character-wrap{
+    font-size: 150px;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-weight: 100;
+}
+
+.player-indicator{
+    color: #DDD;
+    font-weight: 100;
+}
+
+.turn-indicator{
+    /*background-color: #CCC;*/
+    color: #333;
+    font-weight: 700;
 }
