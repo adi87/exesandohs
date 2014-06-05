@@ -1,3 +1,16 @@
+.body-container{
+    position: relative;
+}
+.waiting-screen{
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    background: rgba(133,133,133,0.4);
+    z-index: 2;
+}
+
+
 .game-div-wrapper{
     width: 600px;
     height: 600px;
@@ -6,8 +19,8 @@
 
 .play-box{
     float: left;
-    width: 31%;
-    height: 31%;
+    width: 33%;
+    height: 33%;
     border: 1px solid #DDD;
     text-align:center;
 }

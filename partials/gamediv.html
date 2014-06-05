@@ -1,4 +1,3 @@
-
 <span>room</span>: <strong>{{room_id}}</strong>
 <div class="row">
     <div class="span6">
@@ -13,13 +12,19 @@
         <span>Character: <input ng-model="opponent.character" type="text"></input></span>
     </div>
 </div>
-<input type="button" class="btn" value="restart" ng-click="reset_game()"></input>
-<div class="game-div-wrapper">
-    <div class="play-box box-played-{{box.character}}" ng-class="{'box-unplayed': (box.character==null), 'box-won': (box.won)}" ng-repeat="(box_id,box) in play_boxes" ng-click="takeTurn(box_id)">
-        <div class='centered-vert-dad'>
-            <span class="centered-vert"></span>
-            <div class='centered-vert-child'>
-                <span class="character-wrap">{{box.character}}</span>
+<input type="button" class="btn" value="restart" ng-show="user.host" ng-click="reset_game()"></input>
+    <div class="game-div-wrapper">
+        <div class="waiting-screen" ng-hide="opponent">
+            Waiting for opponent...<br/>
+            Send them this link:
+            <pre>{{share_link}}</pre>
+        </div>
+        <div class="play-box box-played-{{box.character}}" ng-class="{'box-unplayed': (box.character==null), 'box-won': (box.won)}" ng-repeat="(box_id,box) in play_boxes" ng-click="takeTurn(box_id)">
+            <div class='centered-vert-dad'>
+                <span class="centered-vert"></span>
+                <div class='centered-vert-child'>
+                    <span class="character-wrap">{{box.character}}</span>
+                </div>
             </div>
         </div>
     </div>

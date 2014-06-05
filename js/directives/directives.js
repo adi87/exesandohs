@@ -8,19 +8,31 @@ define(['angular'], function (angular) {
                             };
                         } ])
 
-                        .directive('gameDiv', ['$log','PubNub','$rootScope','$routeParams','$timeout',function($log,PubNub,$rootScope,$routeParams,$timeout){
+                        .directive('gameDiv',
+                                   ['$log',
+                                    'PubNub',
+                                    '$rootScope',
+                                    '$routeParams',
+                                    '$timeout',
+                                    '$location',
+                                   function($log,
+                                            PubNub,
+                                            $rootScope,
+                                            $routeParams,
+                                            $timeout,
+                                            $location){
                             return {
                                 restrict: 'E',
                                 templateUrl: 'partials/gamediv.html',
                                 link: function(scope, elm, attrs) {
-                                    function genRoomID(){
-                                        //return chance.word(10);
-                                        return 'abcdef';
-                                    }
                                     var uid = chance.word(10);
                                     scope.initialize_game = function(){
                                         scope.play_boxes = {};
-                                        scope.room_id = $routeParams.room_id || genRoomID();
+                                        scope.room_id = $routeParams.room_id || chance.word(10);
+                                        scope.share_link =  $location.protocol()+'://'+
+                                                            $location.host()+':'+$location.port()+
+                                                            '/#'+$location.path()+'/'+
+                                                            scope.room_id;
                                         scope.turn = ($routeParams.room_id) ? false : true;
                                         scope.theChannel = 'exesandohs_'+scope.room_id;
                                         scope.character = ($routeParams.room_id) ? 'o' : 'x';
@@ -29,7 +41,7 @@ define(['angular'], function (angular) {
                                         scope.user = {
                                             uid: uid,
                                             character: scope.character,
-                                            boxes: []
+                                            boxes: [],
                                         };
                                         scope.players_obj = {};
                                         scope.players_obj[scope.user.uid] = scope.user;
@@ -71,19 +83,21 @@ define(['angular'], function (angular) {
 
                                     startIdenting();
 
-                                    function startIdenting(){
-                                        identMessage();
+                                    function identMessage(){
+                                        PubNub.ngPublish({
+                                            channel: scope.theChannel,
+                                            message: { type: 'ident',
+                                                       payload: scope.players_obj,
+                                                       sender: scope.user.uid
+                                                   }
+                                        });
                                     }
 
-                                    function identMessage(){
+                                    function startIdenting(){
+                                        identMessage();
                                         $timeout(function(){
-                                            PubNub.ngPublish({
-                                                channel: scope.theChannel,
-                                                message: { type: 'ident',
-                                                           payload: scope.players_obj
-                                                       }
-                                            });
                                             identMessage();
+                                            startIdenting();
                                         },5000);
                                     }
 
@@ -98,7 +112,7 @@ define(['angular'], function (angular) {
                                             }
                                             scope.finishTurn();
                                         }else if(msg.type == 'ident'){
-                                            identOpponent(msg.payload);
+                                            identOpponent(msg.payload,msg.sender);
                                         }else if(msg.type == 'reset'){
                                             scope.initialize_game();
                                         }
@@ -107,14 +121,24 @@ define(['angular'], function (angular) {
                                     });
                                     // }
 
-                                    function identOpponent(players_obj){
-                                        $.extend(scope.players_obj,players_obj);
+                                    function identOpponent(players_obj,sender){
+                                        if(sender==scope.user.uid){
+                                            // scope.players_obj = {};
+                                            // scope.players_obj[scope.user.uid] = scope.user;
+                                        }else{
+                                            $.extend(scope.players_obj,players_obj);
+                                        }
+                                        if(Object.keys(scope.players_obj).length==1){
+                                            scope.opponent = false;
+                                            return;
+                                        }
                                         scope.opponent = (function(obj){
                                             for(var k in obj){
                                                 if(k != scope.user.uid){
                                                     return obj[k];
                                                 }
                                             }
+                                            return false;
                                         })(players_obj);
                                         // identSelf();
                                     }
