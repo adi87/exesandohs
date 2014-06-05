@@ -26,9 +26,9 @@ define(['angular'], function (angular) {
                                 templateUrl: 'partials/gamediv.html',
                                 link: function(scope, elm, attrs) {
                                     var uid = chance.word(10);
+                                    scope.room_id = $routeParams.room_id || chance.word(10);
                                     scope.initialize_game = function(){
                                         scope.play_boxes = {};
-                                        scope.room_id = $routeParams.room_id || chance.word(10);
                                         scope.share_link =  $location.protocol()+'://'+
                                                             $location.host()+':'+$location.port()+
                                                             '/#'+$location.path()+'/'+
@@ -42,6 +42,7 @@ define(['angular'], function (angular) {
                                             uid: uid,
                                             character: scope.character,
                                             boxes: [],
+                                            host: ($routeParams.room_id) ? false : true
                                         };
                                         scope.players_obj = {};
                                         scope.players_obj[scope.user.uid] = scope.user;

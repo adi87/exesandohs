@@ -6,12 +6,26 @@
     top: 0px;
     height: 100%;
     width: 100%;
-    background: rgba(133,133,133,0.4);
+    background: rgba(6, 104, 124, 0.46);
     z-index: 2;
+    color: white;
+}
+
+.waiting-screen-turn{
+    background: rgba(6, 104, 124, 0.16);
+}
+
+.wait-message-wrap{
+    font-size: 40px;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-weight: 100;
+    line-height: 50px;
+    padding: 50px;
 }
 
 
 .game-div-wrapper{
+    margin: auto;
     width: 600px;
     height: 600px;
     position: relative;
@@ -21,7 +35,7 @@
     float: left;
     width: 33%;
     height: 33%;
-    border: 1px solid #DDD;
+    border: 1px solid #EEE;
     text-align:center;
 }
 
@@ -42,6 +56,9 @@
     /*background: blue;*/
 }
 
+span.centered-vert-message{
+    line-height: 490px;
+}
 
 span.centered-vert{
     line-height: 190px;
@@ -66,4 +83,8 @@ div.centered-vert-child{
     /*background-color: #CCC;*/
     color: #333;
     font-weight: 700;
+}
+
+.restart-game{
+    margin: auto;
 }
