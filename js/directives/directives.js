@@ -28,10 +28,12 @@ define(['angular'], function (angular) {
                                     var uid = chance.word(10);
                                     scope.room_id = $routeParams.room_id || chance.word(10);
                                     scope.initialize_game = function(){
+                                        console.log(window.location.pathname)
                                         scope.play_boxes = {};
                                         scope.share_link =  $location.protocol()+'://'+
                                                             $location.host()+':'+$location.port()+
-                                                            '/#'+$location.path()+'/'+
+                                                            window.location.pathname+
+                                                            '#'+$location.path()+'/'+
                                                             scope.room_id;
                                         scope.turn = ($routeParams.room_id) ? false : true;
                                         scope.theChannel = 'exesandohs_'+scope.room_id;
