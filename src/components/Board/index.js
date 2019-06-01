@@ -7,19 +7,26 @@ import WinningDialog from './WinningDialog'
 import { checkWinner } from '../../services/game';
 
 
-const styles = {
+const styles = theme => ({
     root: {
-      height: '90vh',
+      height: '100vh',
       width: '100vw',
     },
     boardGrid: {
       height: '50vw',
       width: '50vw',
-      maxHeight: '90vh',
-      margin: 'auto',
-      marginTop: '10vh',
+      maxHeight: '80vh',
+      position: 'absolute',
+      bottom: '10vh',
+      left: '25vw',
+      background: '#FFF',
+      [theme.breakpoints.down('sm')]: {
+        height: '80vw',
+        width: '80vw',
+        left: '10vw',
+      },
     },
-}
+})
 
 
 const Board = class Board extends Component {
