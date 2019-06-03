@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@material-ui/core/Grid';
 import PubNubReact from 'pubnub-react';
 import Chance from 'chance';
 import lGet from 'lodash/get';
 import copy from 'copy-to-clipboard';
+import Snackbar from '@material-ui/core/Snackbar';
+
 
 import Box from '../Box';
 import WinningDialog from './WinningDialog'
@@ -96,6 +99,7 @@ const Board = class Board extends Component {
     winner: null,
     openWinnerDialog: false,
     myTurn: true,
+    openCopySnackbar: false,
   }
 
   constructor(props) {
@@ -111,6 +115,10 @@ const Board = class Board extends Component {
         this.resetGame();
         this.sendRealtimeMessage({ mtype: 'reset' })
       }
+    }
+
+    this.handleCloseCopySnackbar = ()=> {
+      this.setState({ openCopySnackbar: false });
     }
 
     this.playTurn = (id)=> {
@@ -135,6 +143,7 @@ const Board = class Board extends Component {
 
     this.copyShareUrl = ()=> {
       copy(this.getShareUrl());
+      this.setState({ openCopySnackbar: true });
     }
   }
 
@@ -253,7 +262,7 @@ const Board = class Board extends Component {
 
   render() {
     const { classes } = this.props;
-    const { boxes, openWinnerDialog, winner, opponent, myTurn } = this.state;
+    const { boxes, openWinnerDialog, winner, opponent, myTurn, openCopySnackbar } = this.state;
 
     const boxCells = objectToBoxArray(boxes)
       .map( box =>
@@ -284,6 +293,27 @@ const Board = class Board extends Component {
           {boxCells}
         </Grid>
         <WinningDialog open={openWinnerDialog} onClose={this.handleCloseDialog} winner={winner} />
+        <Snackbar
+            onClose={this.handleCloseCopySnackbar}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            open={openCopySnackbar}
+            autoHideDuration={5000}
+            message={<span id="message-id">Copied Link</span>}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                className={classes.close}
+                onClick={this.handleCloseCopySnackbar}
+              >
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          />
         {turnMessage}
       </div>
     );
