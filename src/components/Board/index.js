@@ -19,22 +19,25 @@ const styles = theme => ({
       width: '100vw',
     },
     boardGrid: {
-      height: '50vw',
-      width: '50vw',
-      maxHeight: '80vh',
-      position: 'absolute',
-      bottom: '10vh',
-      left: '25vw',
+      position: 'relative',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      height: '90vw',
+      width: '90vw',
+      maxHeight: '90vh',
+      // position: 'absolute',
+      margin: 'auto',
+      // left: '25vw',
       background: '#FFF',
-      [theme.breakpoints.down('sm')]: {
-        height: '80vw',
-        width: '80vw',
-        left: '10vw',
+      '@media (orientation: landscape)': {
+        height: '90vh',
+        width: '90vh',
       },
     },
     header: {
-      height: '10vw',
-      marginTop: '10vh',
+      position: 'absolute',
+      left: '10vw',
+      bottom: 0,
     },
     turnState: {
       position: 'absolute',
@@ -45,37 +48,32 @@ const styles = theme => ({
 
 const CHANNEL_NAME = 'exesandohs-v2';
 
-const INITIAL_STATE = {
-  boxes: [],
-  user: {
-    id: chance.guid(),
-    character: 'x',
-  },
-  opponent: null,
-  gameId: null,
-  winner: null,
-  openWinnerDialog: false,
-  myTurn: true,
-}
+const getBoxes = ()=> Array.from(Array(9).keys()).reduce((result, id)=> {
+  result[id] = { id, value: null };
+  return result;
+}, {});
 
 
 const Board = class Board extends Component {
 
-  state = INITIAL_STATE
+  state = {
+    boxes: getBoxes(),
+    user: {
+      id: chance.guid(),
+      character: 'x',
+    },
+    opponent: null,
+    gameId: null,
+    winner: null,
+    openWinnerDialog: false,
+    myTurn: true,
+  }
 
   constructor(props) {
     super(props);
 
     this.pubnub = new PubNubReact({ publishKey: 'pub-cdc72730-41c8-4929-ab40-355c0b2cab4b', subscribeKey: 'sub-faf7eb11-0d87-11e2-8899-95dd86ce2293' });
     this.pubnub.init(this);
-
-    this.getBoxes = ()=> {
-      const boxes = {};
-      Array.from(Array(9).keys()).forEach( id => {
-        boxes[id] = { id, value: null };
-      });
-      return boxes;
-    }
 
     this.handleCloseDialog = (restart)=> {
       this.setState({ openWinnerDialog: false });
@@ -87,7 +85,9 @@ const Board = class Board extends Component {
     }
 
     this.playTurn = (id)=> {
-      const { boxes, winner, gameId, myTurn, user } = this.state;
+      const { boxes, winner, gameId, myTurn, user, opponent } = this.state;
+      // if there's no opponent, do nothing
+      if(!opponent) return;
       // if it's not my turn, do nothing
       if(!myTurn) return;
       // if the game is over, no more moves are allowed
@@ -106,11 +106,10 @@ const Board = class Board extends Component {
   }
 
   resetGame() {
-    const boxes = this.getBoxes();
     const { gameId, isHost } = this.getGameId();
     const { user } = this.state;
     let newState = {
-      boxes,
+      boxes: getBoxes(),
       gameId,
       winner: null,
       openWinnerDialog: false,
@@ -233,24 +232,22 @@ const Board = class Board extends Component {
         />
       )
 
-    const shareDiv = <Typography variant="h5">{this.getShareUrl()}</Typography>;
+    const shareDiv = <Typography className={classes.header} variant="body2">{this.getShareUrl()}</Typography>;
 
     const turnMessage = (winner !== null)
       ? ''
       : <Typography className={classes.turnState} variant="body2" align="center">
-        {myTurn ? 'Your turn' : 'Waiting for opponent...'}
+        {(myTurn && opponent !== null) ? 'Your turn' : 'Waiting for opponent...'}
       </Typography>
 
     return (
       <div className={classes.root}>
-        <Container maxWidth="sm">
-          { opponent !== null ? '' : shareDiv }
-          <Grid container className={classes.boardGrid}>
-            {boxCells}
-          </Grid>
-          <WinningDialog open={openWinnerDialog} onClose={this.handleCloseDialog} winner={winner} />
-          {turnMessage}
-        </Container>
+        { opponent !== null ? '' : shareDiv }
+        <Grid container className={classes.boardGrid}>
+          {boxCells}
+        </Grid>
+        <WinningDialog open={openWinnerDialog} onClose={this.handleCloseDialog} winner={winner} />
+        {turnMessage}
       </div>
     );
   }
