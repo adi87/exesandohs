@@ -15,6 +15,9 @@ import { objectToBoxArray, checkWinner } from '../../services/game';
 
 const chance = new Chance();
 
+const redColor = '#ff572287';
+const greenColor = '#8bc34a75';
+
 const styles = theme => ({
     root: {
       height: '100vh',
@@ -34,7 +37,7 @@ const styles = theme => ({
       // position: 'absolute',
       margin: 'auto',
       // left: '25vw',
-      background: '#ff572287',
+      background: redColor,
       zIndex: 2,
     },
     shareText: {
@@ -47,7 +50,6 @@ const styles = theme => ({
       margin: 'auto',
       color: 'white',
       fontSize: '2.5vmin',
-      width: '100%',
     },
     boardGrid: {
       position: 'relative',
@@ -67,8 +69,9 @@ const styles = theme => ({
     },
     turnState: {
       position: 'absolute',
-      bottom: 0,
-      right: '10vw',
+      bottom: '3vh',
+      fontSize: '1em',
+      right: '5vw',
     }
 })
 
@@ -277,7 +280,7 @@ const Board = class Board extends Component {
     return (
       <div className={classes.root}>
         { opponent !== null ? '' : shareDiv }
-        <Grid container className={classes.boardGrid}>
+        <Grid container className={classes.boardGrid} style={{ background: myTurn ? greenColor : redColor }}>
           {boxCells}
         </Grid>
         <WinningDialog open={openWinnerDialog} onClose={this.handleCloseDialog} winner={winner} />

@@ -36,6 +36,7 @@ const Box = (props) => {
       item
       xs={4}
       key={id}
+      style={{ background: value !== null ? 'white': undefined }}
     >
       <div
         className={classes.box}
