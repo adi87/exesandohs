@@ -1,4 +1,7 @@
 
+export const objectToBoxArray = boxes => Array.from(Array(Object.keys(boxes).length).keys()).map( i => boxes[i] );
+
+
 const checkCombos = (currentBoxIds)=> {
   const winningCombos = [
     [0,4,8],
@@ -21,11 +24,11 @@ const checkCombos = (currentBoxIds)=> {
   return hasWon;
 }
 
-export const checkWinner = (boxes)=> {
-  const exes = Array.from(boxes).filter(([, box]) => box.value === 'x').map(([, { id }])=> id);
+export const checkWinner = (boxes = {})=> {
+  const exes = objectToBoxArray(boxes).filter( box => box.value === 'x').map(({ id })=> id);
   const exesHasWon = checkCombos(exes);
   if(exesHasWon) return 'Exes';
-  const ohs = Array.from(boxes).filter(([, box]) => box.value === 'o').map(([, { id }])=> id);
+  const ohs = objectToBoxArray(boxes).filter( box => box.value === 'o').map(({ id })=> id);
   const ohsHasWon = checkCombos(ohs);
   if(ohsHasWon) return 'Ohs';
   return null;

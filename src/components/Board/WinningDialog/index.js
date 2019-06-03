@@ -28,14 +28,14 @@ export default function SimpleDialog(props) {
       <DialogTitle id="alert-dialog-title">We have a winner!</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Congratulations {winner}, you have won the game!
+          <b>{winner}</b> has won the game!
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">
           Close
         </Button>
-        <Button onClick={handleRestart} color="primary" autoFocus>
+        <Button onClick={handleRestart} color="primary">
           Restart
         </Button>
       </DialogActions>
