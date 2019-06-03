@@ -142,7 +142,18 @@ const Board = class Board extends Component {
     }
 
     this.copyShareUrl = ()=> {
-      copy(this.getShareUrl());
+      const shareUrl = this.getShareUrl();
+      if(navigator.share) {
+        navigator
+          .share({
+              title: document.title,
+              text: 'Exes And Ohs - Play with me!',
+              url: shareUrl
+          })
+          .then(() => console.log('Successful share! 🎉'))
+          .catch(err => console.error(err));
+      }
+      copy(shareUrl);
       this.setState({ openCopySnackbar: true });
     }
   }
