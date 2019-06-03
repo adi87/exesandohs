@@ -27,10 +27,10 @@ export default function SimpleDialog(props) {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">We have a winner!</DialogTitle>
+      <DialogTitle id="alert-dialog-title">We have a { winner === false ? 'tie' : 'winner'}!</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          <b>{winner}</b> has won the game!
+          { winner === false ? 'You are evenly matched' : <span><b>{winner}</b> has won the game</span> }
         </DialogContentText>
       </DialogContent>
       <DialogActions>

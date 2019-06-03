@@ -31,5 +31,7 @@ export const checkWinner = (boxes = {})=> {
   const ohs = objectToBoxArray(boxes).filter( box => box.value === 'o').map(({ id })=> id);
   const ohsHasWon = checkCombos(ohs);
   if(ohsHasWon) return 'Ohs';
+  const allBoxesFilled = objectToBoxArray(boxes).filter( box => box.value === null );
+  if(!allBoxesFilled.length) return false;
   return null;
 }

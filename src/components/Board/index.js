@@ -151,10 +151,15 @@ const Board = class Board extends Component {
               url: shareUrl
           })
           .then(() => console.log('Successful share! 🎉'))
-          .catch(err => console.error(err));
+          .catch(err => {
+            console.error(err)
+            copy(shareUrl);
+            this.setState({ openCopySnackbar: true });
+          });
+      } else {
+        copy(shareUrl);
+        this.setState({ openCopySnackbar: true });
       }
-      copy(shareUrl);
-      this.setState({ openCopySnackbar: true });
     }
   }
 
@@ -204,11 +209,7 @@ const Board = class Board extends Component {
 
   getShareUrl() {
     const { gameId } = this.state;
-    return [
-      window.location.protocol,
-      window.location.host,
-      `?game=${gameId}`
-    ].join('/');
+    return `${window.location.protocol}//${window.location.host}/?game=${gameId}`;
   }
 
 
