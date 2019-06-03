@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Grid from '@material-ui/core/Grid';
 import PubNubReact from 'pubnub-react';
 import Chance from 'chance';
 import lGet from 'lodash/get';
+import copy from 'copy-to-clipboard';
 
 import Box from '../Box';
 import WinningDialog from './WinningDialog'
@@ -17,6 +19,35 @@ const styles = theme => ({
     root: {
       height: '100vh',
       width: '100vw',
+    },
+    copyIcon: {
+      fontSize: '2.5vmin',
+      marginRight: '10px',
+    },
+    shareDiv: {
+      position: 'absolute',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      height: '100vh',
+      width: '100vw',
+      textAlign: 'center',
+      // position: 'absolute',
+      margin: 'auto',
+      // left: '25vw',
+      background: '#ff572287',
+      zIndex: 2,
+    },
+    shareText: {
+      cursor: 'pointer',
+      top: '50%',
+      position: 'relative',
+      transform: 'translateY(-50%)',
+      padding: '20px',
+      background: '#f44336ab',
+      margin: 'auto',
+      color: 'white',
+      fontSize: '2.5vmin',
+      width: '100%',
     },
     boardGrid: {
       position: 'relative',
@@ -33,11 +64,6 @@ const styles = theme => ({
         height: '90vh',
         width: '90vh',
       },
-    },
-    header: {
-      position: 'absolute',
-      left: '10vw',
-      bottom: 0,
     },
     turnState: {
       position: 'absolute',
@@ -102,6 +128,10 @@ const Board = class Board extends Component {
       // otherwise set the value of the box to user's character and send it
       console.log('sending box', box);
       this.sendRealtimeMessage({ mtype: 'turn', payload: { box, gameId } });
+    }
+
+    this.copyShareUrl = ()=> {
+      copy(this.getShareUrl());
     }
   }
 
@@ -232,7 +262,11 @@ const Board = class Board extends Component {
         />
       )
 
-    const shareDiv = <Typography className={classes.header} variant="body2">{this.getShareUrl()}</Typography>;
+    const shareDiv = <div className={classes.shareDiv} onClick={this.copyShareUrl}>
+      <Typography className={classes.shareText} variant="body2">
+        <FileCopyIcon fontSize="inherit" className={classes.copyIcon} />{this.getShareUrl()}
+      </Typography>
+    </div>
 
     const turnMessage = (winner !== null)
       ? ''

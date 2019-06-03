@@ -22,6 +22,8 @@ export default function SimpleDialog(props) {
     <Dialog
       {...other}
       onClose={handleClose}
+      disableBackdropClick={true}
+      disableEscapeKeyDown={true}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -32,9 +34,6 @@ export default function SimpleDialog(props) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Close
-        </Button>
         <Button onClick={handleRestart} color="primary">
           Restart
         </Button>
